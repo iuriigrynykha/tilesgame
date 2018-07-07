@@ -21,3 +21,7 @@
   height: 100px;
   border: 1px solid #ccc;
 }
+
+.hidden {
+  opacity: 0;
+}

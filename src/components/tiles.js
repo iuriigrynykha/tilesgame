@@ -10,13 +10,14 @@ export class Tiles extends Component {
         game: false,
         latestClick: '',
         tiles: [],
+        tilesSet: [],
+        disabled: false
       };
       this.onClick = this.onClick.bind(this);
     }
 
     onClick(e) {
-        const btn = e.target;
-        btn.setAttribute('disabled', null);
+        e.target.setAttribute('disabled', null);
         this.setState({ 
             latestClick: e.target.value
         });
@@ -34,23 +35,31 @@ export class Tiles extends Component {
         this.setState({ tiles: shuffle(colors)});
     }
 
-    componentWillUpdate(nextProps, nextSate) {
-        if(this.state.latestClick === nextSate.latestClick) {
+    componentWillUpdate(nextProps, nextState) {
+        const tilesSet = this.state.tilesSet;
+        tilesSet.push(nextState.latestClick);
+
+        if(tilesSet[0] === tilesSet[1]) {
             delete this.state.tiles[this.state.tiles.indexOf(this.state.latestClick)];
-            delete this.state.tiles[this.state.tiles.indexOf(nextSate.latestClick)];
+            delete this.state.tiles[this.state.tiles.indexOf(nextState.latestClick)];
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        prevState.tiles.every(elem => {
-            return elem === undefined ? alert('You are a winer') : false;
-        });
+        const btns = document.querySelectorAll('.tile');
+        console.log(this.state.tilesSet.length);
+        if(this.state.tilesSet.length === 2) {
+            btns.forEach((elem) => {
+                elem.removeAttribute('disabled');
+            });
+            this.setState({ tilesSet: [] });
+        } 
     }
     
     render() {
         const tiles = this.state.tiles.map((elem, i) => {
             return <button 
-                      className="tile" 
+                      className="tile"
                       value={elem} 
                       key={'playbutton_' + i}
                       style={{backgroundColor: elem}}
