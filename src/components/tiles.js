@@ -16,7 +16,7 @@ export class Tiles extends Component {
 
     onClick(e) {
         const btn = e.target;
-        btn.setAttribute('disabled', 'true');
+        btn.setAttribute('disabled', null);
         this.setState({ 
             latestClick: e.target.value
         });
