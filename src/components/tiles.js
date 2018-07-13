@@ -1,77 +1,22 @@
-import React, { Component } from 'react';
+import React, { Fragment } from "react";
 
-import { colors } from '../data/data';
-import shuffle from 'lodash/shuffle';
-
-export class Tiles extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        game: false,
-        latestClick: '',
-        tiles: [],
-        tilesSet: [],
-        disabled: false
-      };
-      this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(e) {
-        e.target.setAttribute('disabled', null);
-        this.setState({ 
-            latestClick: e.target.value
-        });
-    }
-
-    // endGame() {
-    //     this.setState({
-    //         game: false,
-    //         tiles: [],
-    //         latestClick: ''
-    //       });
-    // }
-
-    componentWillMount() {
-        this.setState({ tiles: shuffle(colors)});
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        const tilesSet = this.state.tilesSet;
-        tilesSet.push(nextState.latestClick);
-
-        if(tilesSet[0] === tilesSet[1]) {
-            delete this.state.tiles[this.state.tiles.indexOf(this.state.latestClick)];
-            delete this.state.tiles[this.state.tiles.indexOf(nextState.latestClick)];
+export const Tiles = props => {
+  return (
+    <Fragment>
+      <button
+        style={{ backgroundColor: props.tilesColor }}
+        value={props.value}
+        className={
+          props.id === props.activeTileId ? "tile-inner active" : "tile-inner"
         }
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        const btns = document.querySelectorAll('.tile');
-        console.log(this.state.tilesSet.length);
-        if(this.state.tilesSet.length === 2) {
-            btns.forEach((elem) => {
-                elem.removeAttribute('disabled');
-            });
-            this.setState({ tilesSet: [] });
-        } 
-    }
-    
-    render() {
-        const tiles = this.state.tiles.map((elem, i) => {
-            return <button 
-                      className="tile"
-                      value={elem} 
-                      key={'playbutton_' + i}
-                      style={{backgroundColor: elem}}
-                      onClick={this.onClick} 
-                      disabled={this.state.disabled}>
-                      {elem}
-                   </button>
-        })
-        return (
-            <div>
-                {tiles}
-            </div>
-        );
-    }
-}
+        onClick={e => {
+          const tile = e.target.value;
+          props.latestClickId(props.id);
+            props.latestClickValue(props.value);
+            props.setActiveTile(tile);
+        }}
+        disabled={props.id === props.activeTileId ? "disabled" : null}
+      />
+    </Fragment>
+  );
+};

@@ -1,17 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import App from './App';
+import store from "./store";
+import { App } from "./components/App";
+import { StartGame } from "./components/StartGame";
 
-import registerServiceWorker from './registerServiceWorker';
+import "./styles.css";
 
-const store = createStore((state = {}) => state);
-
+const rootElement = document.getElementById("root");
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>
-    , document.getElementById('root'));
-registerServiceWorker();
+  <Provider store={store}>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={StartGame} />
+        <Route path="/game" component={App} />
+      </Switch>
+    </BrowserRouter>
+  </Provider>,
+  rootElement
+);
