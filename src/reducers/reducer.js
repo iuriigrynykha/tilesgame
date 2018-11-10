@@ -1,5 +1,6 @@
 import colors from "../data/colors";
 import shuffle from "lodash/shuffle";
+
 export default function reducer(
   state = {
     latestClick: null,
